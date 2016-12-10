@@ -163,3 +163,8 @@ cscope.in.out
 cscope.po.out
 
 rice-box.go
+bin/locker
+assets/web/css
+assets/web/index.html
+assets/web/js
+assets/web/README.md

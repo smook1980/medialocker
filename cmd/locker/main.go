@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/smook1980/medialocker/server"
+)
 
 var (
 	Version = ""
@@ -8,5 +12,6 @@ var (
 )
 
 func main() {
-	fmt.Println("Hello world!")
+	fmt.Println("Hello world! ", Version, Commit)
+	server.StartServer()
 }

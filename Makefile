@@ -76,7 +76,6 @@ run-dev: ${BINARY}
 clean:
 	if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 	find . -type f -name rice-box.go -print0 | xargs -0 rm
-	cd ui && rm -rf public
-	cd ui && rm -rf node_modules
+	cd assets && rm -rf web
 
 .PHONY: clean test jstest gotest run

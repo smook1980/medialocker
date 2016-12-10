@@ -1,3 +1,5 @@
 package: github.com/smook1980/medialocker
 import:
 - package: github.com/GeertJohan/go.rice
+- package: github.com/labstack/echo
+  version: ^3.0.3

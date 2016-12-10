@@ -10,7 +10,7 @@
   "scripts": {
     "build": "brunch build --production",
     "build:dev": "brunch build",
-    "start": "brunch watch",
+    "dev-server": "brunch watch --server",
     "lint": "node_modules/eslint/bin/eslint.js app/",
     "clean": "rm -rf public"
   },
@@ -22,10 +22,11 @@
     "sass-brunch": "^2.6.3"
   },
   "devDependencies": {
+    "browser-sync-brunch": "^0.0.9",
     "brunch": "^2.0.0",
-    "javascript-brunch": "^2.0.0",
-    "uglify-js-brunch": "^2.0.0",
     "clean-css-brunch": "^2.0.0",
-    "auto-reload-brunch": "^2.0.0"
+    "javascript-brunch": "^2.0.0",
+    "pugjs-brunch": "^2.8.5",
+    "uglify-js-brunch": "^2.0.0"
   }
 }
