@@ -1,0 +1,18 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+// using neat to apply outer-container styles to .container divs
+.container {
+	@include outer-container;
+}
+
+.content {
+	padding: 1em;
+}

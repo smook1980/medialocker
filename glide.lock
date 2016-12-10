@@ -1,0 +1,6 @@
+hash: b522836576811a7760093625324a89c0357da184b16b7eed20c6e5da06e08701
+updated: 2016-12-09T20:11:45.893722676-06:00
+imports:
+- name: github.com/GeertJohan/go.rice
+  version: 9fdfd46f9806a9228aae341d65ab75c5235c383c
+testImports: []

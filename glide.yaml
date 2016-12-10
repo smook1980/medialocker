@@ -1,0 +1,3 @@
+package: github.com/smook1980/medialocker
+import:
+- package: github.com/GeertJohan/go.rice
