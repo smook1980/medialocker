@@ -3,3 +3,5 @@ import:
 - package: github.com/GeertJohan/go.rice
 - package: github.com/labstack/echo
   version: ^3.0.3
+- package: github.com/urfave/cli
+  version: ^1.19.1

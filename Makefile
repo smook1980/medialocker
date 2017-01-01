@@ -3,7 +3,8 @@ COMMIT ?= $(shell git rev-parse --short=8 HEAD)
 
 SOURCES := $(shell find . -name '*.go')
 
-LDFLAGS=-ldflags "-s -X main.Version=${VERSION} -X main.Commit=${COMMIT}"
+LDFLAGS=-ldflags "-s -X medialocker.Version=${VERSION} -X medialocker.Commit=${COMMIT}"
+DEV_LDFLAGS=-ldflags "-s -X medialocker.DevMode=true -X medialocker.Commit=${COMMIT}"
 BINARY=./bin/locker
 
 GLIDE := $(shell realpath ${GOPATH}/bin/glide)
@@ -13,7 +14,11 @@ default: dep build
 
 build: assets ${BINARY}
 
-dev: dev-assets ${BINARY}
+dev-server: dev-assets
+	go run ${DEV_LDFLAGS} ./cmd/locker/main.go
+
+dev-bin: dev-assets
+	go build -o ./bin/locker-dev ${DEV_LDFLAGS} ./cmd/locker/main.go
 
 ${BINARY}: $(SOURCES)
 	go build -o ${BINARY} ${LDFLAGS} ./cmd/locker/main.go
@@ -37,7 +42,7 @@ js:
 	cd ui && npm run build
 
 dev-js:
-	cd ui && npm run build:dev
+	cd ui && yarn build
 
 dep: jsdep godep
 
@@ -69,10 +74,6 @@ jstest:
 
 run: ${BINARY}
 	./bin/locker
-
-run-dev: ${BINARY}
-	./bin/locker -d
-
 clean:
 	if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 	find . -type f -name rice-box.go -print0 | xargs -0 rm

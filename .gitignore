@@ -168,3 +168,5 @@ assets/web/css
 assets/web/index.html
 assets/web/js
 assets/web/README.md
+bin/dev-server
+bin/locker-dev

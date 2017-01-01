@@ -1,5 +1,5 @@
-hash: 723a4c3e4a7a7da74196e3633c658c250a34c6efe903c5b8c6c80fc890e1d0d1
-updated: 2016-12-10T08:20:44.334528293-06:00
+hash: e5be94f9cd65b1624767049b4416045ab2193f377d9f75021e13cd9f068e4657
+updated: 2016-12-10T09:51:56.657204887-06:00
 imports:
 - name: github.com/daaku/go.zipexe
   version: a5fe2436ffcb3236e175e5149162b41cd28bd27d
@@ -22,6 +22,8 @@ imports:
   version: 30a891c33c7cde7b02a981314b4228ec99380cca
 - name: github.com/tylerb/graceful
   version: 4df1190835320af7076dfcf27b3d071fd3612caf
+- name: github.com/urfave/cli
+  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
 - name: github.com/valyala/fasttemplate
   version: 3b874956e03f1636d171bda64b130f9135f42cff
 - name: golang.org/x/crypto
