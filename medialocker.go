@@ -12,13 +12,6 @@ const (
 	ErrGeneric = Error("General locker error")
 )
 
-// Set at build time, unless in DevMode
-var (
-	Version = ".dev"
-	Commit  = ""
-	DevMode = "false"
-)
-
 type Error string
 
 func (e Error) Error() string {
