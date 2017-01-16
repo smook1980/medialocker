@@ -1,5 +1,7 @@
 package medialocker
 
+// See https://github.com/bamzi/jobrunner
+// https://godoc.org/github.com/qor/worker#QorJobInterface
 import (
 	"sync"
 	"sync/atomic"

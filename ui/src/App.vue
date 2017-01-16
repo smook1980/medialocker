@@ -1,33 +1,30 @@
 <template lang="pug">
   div#app
-    img(src="./assets/logo.png")
-    h1 {{ msg }}
-    el-button(@click.native="startHacking") Let's do it
+    el-tabs(v-model='activeName', @tab-click='handleClick')
+      el-tab-pane(label='User', name='first') User
+      el-tab-pane(label='Config', name='second') Config
+      el-tab-pane(label='Role', name='third') Role
+      el-tab-pane(label='Task', name='fourth') Task
 </template>
 
 <script>
 export default {
   data() {
     return {
-      msg: 'Use Vue 2.0 Today!',
+      activeName: 'first',
     };
   },
   methods: {
-    startHacking() {
-      this.$notify(
-        {
-          title: 'It Works',
-          message: 'We have laid the groundwork for you. Now it\'s your time to build something epic!',
-          duration: 6000,
-        }
-      );
+    handleClick(tab, event) {
+      console.log(tab, event);
     },
   },
 };
 </script>
 
 <style>
-body {
-  font-family: Helvetica, sans-serif;
-}
+ /* body {
+    font-family: 'Open Sans', sans-serif;
+    }
+  */
 </style>

@@ -1,0 +1,140 @@
+
+Video Table
+ID
+Title
+Original Title
+Plot
+Rating int
+Runtime double
+DirectorID int
+Season string
+Expose string
+ContentRating string
+StudioId int
+Year int
+CreatedAt timestamp
+LastPlayedAt timestamp
+PlayCount int
+
+VideoGenre
+VideoId
+GenreId
+
+ImageGenre
+ImageId
+GenreId
+
+Genre
+Id
+Name
+Description
+
+Blob
+Sha256
+Size int
+MimeType
+MimeSubType
+
+FileUri
+Uri Unique
+Sha256 ForeignKey
+mtime timestamp
+ctime timestamp
+
+Image
+Id
+Name
+Description
+Location
+
+ImageTag
+Id
+ImageId
+TagId
+
+ImageBlob
+ID
+ImageId
+Sha256 
+Heigh int
+Width int
+Format string
+Size int
+
+VideoBlob
+Sha256 Id
+VideoID
+Type string
+Codec String
+Aspect string
+Height int
+Width int
+AudioCodec
+Bitrate int
+Fps float
+Size int
+
+VideoImageBlob
+Id
+VideoId
+ImageBlobId
+Timestamp int
+Primary bool
+
+ActorImageBlob
+Id
+ActorId
+ImageBlobId
+
+ImageStyle
+Id
+Height
+Width
+Quality
+Format
+Color
+
+ImageBlobImageStyle
+Id
+ImageBlobId
+StyleId
+Sha256
+
+VideoActor
+Id
+VideoId
+ActorID
+Role
+
+Actor
+Id
+Name
+
+Tag
+Id
+Key
+Value
+
+TagVideo
+Id
+VideoId
+TagId
+
+TagActor
+Id
+ActorId
+TagId
+
+Studio
+Id
+Name
+
+StudioDirector
+Id
+StudioId
+DirectorId
+
+Director
+Id
+Name
+

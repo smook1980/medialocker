@@ -15,8 +15,6 @@ var flags []cli.Flag = []cli.Flag{
 	cli.StringFlag{Name: "name", Value: "bob", Usage: "a name to say"},
 }
 
-var commands []cli.Command
-
 func New() *LockerCli {
 	app := cli.NewApp()
 	app.Name = "locker"

@@ -1,3 +1,4 @@
+//go:generate swagger generate spec -o ../../assets/web/swagger.json
 package main
 
 import (
@@ -21,26 +22,3 @@ func main() {
 		os.Exit(0)
 	}
 }
-
-//func startCli() {
-//	app := cli.NewApp()
-//	app.Name = "locker"
-//	app.Usage = "Media Locker - media manager"
-//
-//	app.Action = func(c *cli.Context) error {
-//		log.Printf("Media Locker v%s #%s", medialocker.Version, medialocker.Commit)
-//		devMode := medialocker.DevMode == "true"
-//
-//		if app, err := medialocker.AppInit(devMode); err == nil {
-//			server.Listen(app, ":3000")
-//			// app.Halt()
-//			// app.Wait()
-//		} else {
-//			return err
-//		}
-//
-//		return nil
-//	}
-//
-//	app.Run(os.Args)
-//}

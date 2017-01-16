@@ -4,7 +4,7 @@ COMMIT ?= $(shell git rev-parse --short=8 HEAD)
 SOURCES := $(shell find . -name '*.go')
 
 LDFLAGS=-ldflags "-s -X medialocker.Version=${VERSION} -X medialocker.Commit=${COMMIT}"
-DEV_LDFLAGS=-ldflags "-s -X medialocker.DevMode=true -X medialocker.Commit=${COMMIT}"
+DEV_LDFLAGS=-ldflags "-s -X medialocker.Version=snapshot -X medialocker.Commit=${COMMIT}"
 BINARY=./bin/locker
 
 GLIDE := $(shell realpath ${GOPATH}/bin/glide)
@@ -14,11 +14,11 @@ default: dep build
 
 build: assets ${BINARY}
 
-dev-server: dev-assets
-	go run ${DEV_LDFLAGS} ./cmd/locker/main.go
+dev-server:
+	go run -tags dev ${DEV_LDFLAGS} ./cmd/locker/main.go
 
-dev-bin: dev-assets
-	go build -o ./bin/locker-dev ${DEV_LDFLAGS} ./cmd/locker/main.go
+dev-bin:
+	go build -tags dev -o ./bin/locker-dev ${DEV_LDFLAGS} ./cmd/locker/main.go
 
 ${BINARY}: $(SOURCES)
 	go build -o ${BINARY} ${LDFLAGS} ./cmd/locker/main.go
@@ -32,17 +32,16 @@ ${BINARY}: $(SOURCES)
 
 assets: js bindata
 
-dev-assets: dev-js bindata
+# dev-assets: dev-js bindata
 
 bindata: ${RICE}
 	go generate -x ./assets
-	# go generate -x ./server
 
 js:
 	cd ui && npm run build
 
-dev-js:
-	cd ui && yarn build
+# dev-js:
+# 	cd ui && yarn build
 
 dep: jsdep godep
 

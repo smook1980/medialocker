@@ -1,10 +1,9 @@
 package assets
 
-//go:generate rice embed-go
+//go:generate ./gen_assets.sh
 
 import (
 	"net/http"
-
 	rice "github.com/GeertJohan/go.rice"
 )
 
