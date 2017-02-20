@@ -1,8 +1,8 @@
 package medialocker
 
 import (
-	"github.com/pkg/errors"
 	"fmt"
+	"github.com/pkg/errors"
 )
 
 // See https://github.com/pkg/errors
@@ -46,7 +46,7 @@ func (me *Error) addErrors(err ...error) {
 func (me Error) Error() string {
 	var errorStack string
 
-	for n, err := range(me.errs) {
+	for n, err := range me.errs {
 		errorStack = fmt.Sprintf("%s \n\nError %i:\n%s", errorStack, n, err)
 	}
 
@@ -68,9 +68,9 @@ func MultiError(errs ...error) error {
 	case error:
 		mErr.addErrors(err)
 		mErr.addErrors(errs...)
-//	case string:
-//		mErr.addErrors(errors.New(err))
-//		mErr.addErrors(errs...)
+		//	case string:
+		//		mErr.addErrors(errors.New(err))
+		//		mErr.addErrors(errs...)
 	case nil:
 		mErr.addErrors(errs...)
 	}
@@ -80,11 +80,9 @@ func MultiError(errs ...error) error {
 
 // Application Errors
 var (
-	// ErrGeneric = errors.New("General locker error")
+// ErrGeneric = errors.New("General locker error")
 )
 
 // func (e Error) Error() string {
 // 	return string(e)
 // }
-
-

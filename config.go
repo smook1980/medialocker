@@ -2,17 +2,17 @@ package medialocker
 
 import (
 	"gopkg.in/ini.v1"
-	"path"
 	"os"
+	"path"
 )
 
 type Config struct {
-	DbPath string
-	MemDB bool
-	LogSQL bool
-	ConfigPath string
-	LogPath string
-	Bind string
+	DbPath       string
+	MemDB        bool
+	LogSQL       bool
+	ConfigPath   string
+	LogPath      string
+	Bind         string
 	DebugLogging bool
 }
 
@@ -48,7 +48,7 @@ func FileConfiguration(configPath string) Configuration {
 			}
 
 			confDir := path.Dir(configPath)
-			err = LocalFileSystem().MkdirAll(confDir, os.ModeDir | os.ModePerm)
+			err = LocalFileSystem().MkdirAll(confDir, os.ModeDir|os.ModePerm)
 			if err != nil {
 				return err
 			}
@@ -87,7 +87,7 @@ func DefaultConfiguration() Configuration {
 			c.DbPath = LocalFileSystem().DataPath("db")
 		}
 
-	    return nil
+		return nil
 	}
 }
 

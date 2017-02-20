@@ -30,9 +30,6 @@ _testmain.go
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# external packages folder
-vendor/
-
 
 ### Node ###
 # Logs
@@ -160,3 +157,7 @@ cscope.in.out
 cscope.po.out
 
 bin/*
+.realize/
+locker
+deps
+assets/web/

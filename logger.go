@@ -2,8 +2,8 @@ package medialocker
 
 import (
 	"github.com/Sirupsen/logrus"
-	"path"
 	"os"
+	"path"
 )
 
 // Logger represents an abstracted structured logging implementation. It
@@ -28,7 +28,7 @@ func NewLoggerWith(config Config) *Logger {
 		}
 	} else {
 		logDir := path.Dir(config.LogPath)
-		err := LocalFileSystem().MkdirAll(logDir, os.ModeDir | os.ModePerm)
+		err := LocalFileSystem().MkdirAll(logDir, os.ModeDir|os.ModePerm)
 		if err != nil {
 			logger.Errorf("Couldn't create log file directory %s: %v!", logDir, err)
 		}
@@ -41,5 +41,5 @@ func NewLoggerWith(config Config) *Logger {
 		}
 	}
 
-	return &Logger{Logger:logger}
+	return &Logger{Logger: logger}
 }

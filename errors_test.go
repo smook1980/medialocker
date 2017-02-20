@@ -1,9 +1,9 @@
 package medialocker
 
 import (
-	"testing"
 	"errors"
 	"fmt"
+	"testing"
 )
 
 func TestMultiError_AddErrors(t *testing.T) {
@@ -12,7 +12,7 @@ func TestMultiError_AddErrors(t *testing.T) {
 
 	testTable := []struct {
 		input, expected []error
-		isNilReturned bool
+		isNilReturned   bool
 	}{
 		{
 			[]error{err1, err2},
@@ -21,7 +21,7 @@ func TestMultiError_AddErrors(t *testing.T) {
 		},
 	}
 
-	for x, data := range(testTable) {
+	for x, data := range testTable {
 		subject := MultiError(data.input...)
 		if (subject == nil) != data.isNilReturned {
 			msg := "Expected return type to "
@@ -47,13 +47,12 @@ func TestMultiError_AddErrors(t *testing.T) {
 		t.Error("Expected returned error's underlying type to medialocker.Error!")
 	}
 
-
 	if len(mErr.errs) != 2 {
 		t.Errorf("Expected two errors to have been record, got %i.", len(mErr.errs))
 	}
 
-	expectedErrs :=[]error{err1, err2}
-	for x, err := range(mErr.errs) {
+	expectedErrs := []error{err1, err2}
+	for x, err := range mErr.errs {
 		if expectedErrs[x] != err {
 			t.Errorf("Expected %i error to be %v.  Got: %v", x, expectedErrs[x], err)
 		}

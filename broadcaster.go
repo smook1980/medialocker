@@ -1,15 +1,15 @@
 package medialocker
 
 import (
-	"sync"
 	"errors"
+	"sync"
 	"time"
 )
 
 type Broadcaster struct {
-	lock sync.RWMutex
-	input chan interface{}
-	stopped chan interface{}
+	lock      sync.RWMutex
+	input     chan interface{}
+	stopped   chan interface{}
 	listeners []*listener
 }
 
@@ -41,7 +41,7 @@ func (bc *Broadcaster) Destroy(timeout int) error {
 	select {
 	case <-bc.stopped:
 	case <-time.After(time.Second * time.Duration(timeout)):
-	  err = errors.New("BroadcastChan.Destroy timed out, forcing closing channels!")
+		err = errors.New("BroadcastChan.Destroy timed out, forcing closing channels!")
 	}
 
 	for _, l := range bc.listeners {
@@ -59,7 +59,7 @@ func (bc *Broadcaster) relay() {
 	}
 
 	bc.input = nil
-	bc.stopped<- struct{}{}
+	bc.stopped <- struct{}{}
 	close(bc.stopped)
 }
 
@@ -69,7 +69,7 @@ func (bc *Broadcaster) sweep() {
 	bc.lock.Lock()
 	defer bc.lock.Unlock()
 
-	for _, l := range(bc.listeners) {
+	for _, l := range bc.listeners {
 		if !l.IsClosed() {
 			listeners = append(listeners, l)
 		}
@@ -97,7 +97,7 @@ func (bc *Broadcaster) Listen(buffSize uint) (<-chan interface{}, Closer) {
 }
 
 func (bc *Broadcaster) Send(msg interface{}) {
-	bc.input<- msg
+	bc.input <- msg
 }
 
 func (bc *Broadcaster) SendChannel() chan<- interface{} {
@@ -114,8 +114,8 @@ func (bc *Broadcaster) broadcast(msg interface{}) {
 }
 
 type listener struct {
-	lock sync.RWMutex
-	closed bool
+	lock    sync.RWMutex
+	closed  bool
 	channel chan interface{}
 }
 
@@ -123,7 +123,7 @@ func (l *listener) Write(msg interface{}) {
 	l.lock.RLock()
 	defer l.lock.RUnlock()
 	if !l.closed {
-		l.channel<- msg
+		l.channel <- msg
 	}
 }
 

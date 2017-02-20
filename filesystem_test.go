@@ -3,12 +3,12 @@ package medialocker
 import (
 	"testing"
 
-	"github.com/spf13/afero"
 	"github.com/casimir/xdg-go"
+	"github.com/spf13/afero"
 )
 
 func init() {
-	testFileSystem = FileSystem{App: xdg.App{Name:"medialocker"}, Fs: afero.NewMemMapFs()}
+	testFileSystem = FileSystem{App: xdg.App{Name: "medialocker"}, Fs: afero.NewMemMapFs()}
 }
 
 func GetTestFileSystem() FileSystem {
@@ -16,7 +16,7 @@ func GetTestFileSystem() FileSystem {
 }
 
 func ResetTestFileSystem() FileSystem {
-	testFileSystem = FileSystem{App: xdg.App{Name:"medialocker"}, Fs: afero.NewMemMapFs()}
+	testFileSystem = FileSystem{App: xdg.App{Name: "medialocker"}, Fs: afero.NewMemMapFs()}
 
 	return testFileSystem
 }

@@ -1,9 +1,9 @@
 package medialocker
 
 import (
+	"fmt"
 	"testing"
 	"time"
-	"fmt"
 )
 
 func TestBroadcaster(t *testing.T) {
@@ -88,8 +88,8 @@ func TestBroadcaster_Send(t *testing.T) {
 	subject.Send("Message")
 
 	for x := 0; x < listenerCount; x++ {
-	  it, _ := subject.Listen(numMsgs)
-	  listeners = append(listeners, it)
+		it, _ := subject.Listen(numMsgs)
+		listeners = append(listeners, it)
 	}
 
 	for x := uint(0); x < numMsgs; x++ {
@@ -110,4 +110,3 @@ func TestBroadcaster_Send(t *testing.T) {
 		}
 	}
 }
-

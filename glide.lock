@@ -1,22 +1,16 @@
-hash: 6de8b8eac8818ca4f49ff4b81b13b431a94bdaa49068a2207413cb283e5e0833
-updated: 2017-01-11T08:55:44.572159624-06:00
+hash: f4ad8876e0c65c95f3ca1eb2316f0f410e51c8108fe1ceabc22cfee9f941ff36
+updated: 2017-01-16T11:25:00.740878907-06:00
 imports:
 - name: github.com/casimir/xdg-go
   version: 372ccc2180dab73316615641d5617c5ed3e35529
+- name: github.com/codegangsta/inject
+  version: 37d7f8432a3e684eef9b2edece76bdfa6ac85b39
 - name: github.com/daaku/go.zipexe
   version: a5fe2436ffcb3236e175e5149162b41cd28bd27d
-- name: github.com/dimfeld/httppath
-  version: c8e499c3ef3c3e272ed8bdcc1ccf39f73c88debc
 - name: github.com/GeertJohan/go.rice
   version: 9fdfd46f9806a9228aae341d65ab75c5235c383c
   subpackages:
   - embedded
-- name: github.com/goadesign/goa
-  version: a917a553d6a32b923417dcb983f216056168c803
-  subpackages:
-  - design
-  - design/apidsl
-  - dslengine
 - name: github.com/jinzhu/gorm
   version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
   subpackages:
@@ -32,8 +26,6 @@ imports:
   subpackages:
   - color
   - log
-- name: github.com/manveru/faker
-  version: 717f7cf83fb78669bfab612749c2e8ff63d5be11
 - name: github.com/mattn/go-colorable
   version: d228849504861217f796da67fae4f6e347643f15
 - name: github.com/mattn/go-isatty
@@ -42,8 +34,6 @@ imports:
   version: ca5e3819723d8eeaf170ad510e7da1d6d2e94a08
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
-- name: github.com/satori/go.uuid
-  version: b061729afc07e77a8aa4fad0a2fd840958f1942a
 - name: github.com/Sirupsen/logrus
   version: d26492970760ca5d33129d2d799e34be5c4782eb
 - name: github.com/spf13/afero
@@ -56,8 +46,6 @@ imports:
   version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
 - name: github.com/valyala/fasttemplate
   version: 3b874956e03f1636d171bda64b130f9135f42cff
-- name: github.com/zach-klippenstein/goregen
-  version: 795b5e3961ea1912fde60af417ad85e86acc0d6a
 - name: golang.org/x/crypto
   version: b07d8c96772f426812d3fc5530710ec1f3b205e7
   subpackages:

@@ -1,15 +1,15 @@
 package medialocker
 
 import (
-	"os"
 	"context"
+	"os"
 	"sync"
 )
 
 type Injector func(*App) error
 
 type AppBuilder struct {
-	app *App
+	app    *App
 	errors []error
 }
 
@@ -18,15 +18,15 @@ func NewAppBuilder() *AppBuilder {
 
 	return &AppBuilder{
 		app: &App{
-			In: os.Stdin,
-			Out: os.Stdout,
-			Err: os.Stderr,
-			context: context,
-			wg: sync.WaitGroup{},
+			In:       os.Stdin,
+			Out:      os.Stdout,
+			Err:      os.Stderr,
+			context:  context,
+			wg:       sync.WaitGroup{},
 			cancleFn: cancleFn,
-			Config: EmptyConfig,
+			Config:   EmptyConfig,
 			Registry: Registry{},
-			Fs: LocalFileSystem(),
+			Fs:       LocalFileSystem(),
 		},
 	}
 }
@@ -43,7 +43,7 @@ func (ab *AppBuilder) Build() (*App, []error) {
 }
 
 func (ab *AppBuilder) Inject(injectors ...Injector) *AppBuilder {
-	for _, fn := range(injectors) {
+	for _, fn := range injectors {
 		err := fn(ab.app)
 		if err != nil {
 			ab.errors = append(ab.errors, err)

@@ -1,17 +1,17 @@
 package medialocker
 
 import (
-	"testing"
 	"bytes"
 	"io"
 	"os"
+	"testing"
 )
 
 type TestingApp struct {
 	App
-	in  bytes.Buffer
-	out bytes.Buffer
-	err bytes.Buffer
+	in   bytes.Buffer
+	out  bytes.Buffer
+	err  bytes.Buffer
 	logs bytes.Buffer
 }
 
@@ -34,7 +34,7 @@ func TestAppConfig(t *testing.T) {
 	EnableTestFileSystem()
 	config, errors := BuildConfig(DefaultConfiguration())
 
-	for _, err := range(errors) {
+	for _, err := range errors {
 		t.Errorf("Unexpected error returned from BuildConfig! %s", err)
 	}
 
@@ -45,7 +45,7 @@ func TestAppConfig(t *testing.T) {
 
 func TestAppBuilder(t *testing.T) {
 	testApp, app, errs := NewAppBuilder().TestBuild()
-	for _, err := range(errs) {
+	for _, err := range errs {
 		t.Errorf("Unexpected error for AppBuilder: %s", err)
 	}
 
@@ -62,7 +62,7 @@ func TestAppBuilder(t *testing.T) {
 
 func TestAppRegistry(t *testing.T) {
 	_, app, errs := NewAppBuilder().TestBuild()
-	for _, err := range(errs) {
+	for _, err := range errs {
 		t.Errorf("Unexpected error for AppBuilder: %s", err)
 	}
 

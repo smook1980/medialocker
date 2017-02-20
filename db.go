@@ -1,9 +1,9 @@
 package medialocker
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"fmt"
 	"sync"
 )
 
@@ -94,9 +94,8 @@ func NewDBConnectionFactory(log *Logger, c Config) (DBConnectionFactory, Closer)
 			}
 		}
 
-		return &DBConnection{DB:db}, nil
+		return &DBConnection{DB: db}, nil
 	}
 
 	return factory, closer
 }
-

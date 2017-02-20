@@ -36,7 +36,7 @@ func LocalFileExists(path string) bool {
 
 func init() {
 	defaultFileSystem = FileSystem{
-		Fs: afero.NewOsFs(),
+		Fs:  afero.NewOsFs(),
 		App: xdg.App{Name: "medialocker"},
 	}
 }

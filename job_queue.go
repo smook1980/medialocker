@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 
 	"github.com/labstack/gommon/log"
-	"golang.org/x/net/context"
+	"context"
 )
 
 type Worker interface {
