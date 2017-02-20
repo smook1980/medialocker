@@ -6,8 +6,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/labstack/gommon/log"
 	"context"
+	"github.com/labstack/gommon/log"
 )
 
 type Worker interface {

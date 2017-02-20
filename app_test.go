@@ -2,6 +2,7 @@ package medialocker
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"os"
 	"testing"
@@ -13,6 +14,21 @@ type TestingApp struct {
 	out  bytes.Buffer
 	err  bytes.Buffer
 	logs bytes.Buffer
+}
+
+func NewTestAppCtx() AppContext {
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, FS_CTX_KEY, &testFileSystem)
+	ctx = context.WithValue(ctx, LOG_CTX_KEY, NewDefaultLogger())
+
+	return AppContext{Context: ctx}
+}
+
+func TestAppContextConfig(t *testing.T) {
+	subject := NewTestAppCtx()
+	if c := subject.NewContainer(AppContextConfig); c == nil {
+		t.Error("NewContainer(AppCOntextConfig) return nil, expected *Container.")
+	}
 }
 
 func (ab *AppBuilder) TestBuild() (*TestingApp, *App, []error) {

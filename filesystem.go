@@ -3,6 +3,8 @@ package medialocker
 import (
 	xdg "github.com/casimir/xdg-go"
 	"github.com/spf13/afero"
+	"path"
+	"os"
 )
 
 type FileSystem struct {
@@ -32,6 +34,20 @@ func LocalFileExists(path string) bool {
 	}
 
 	return exist
+}
+
+func (fs *FileSystem) FileExists(path string) bool {
+	exist, err := afero.Exists(fs.Fs, path)
+	if err != nil {
+		return false
+	}
+
+	return exist
+}
+
+func (fs *FileSystem) EnsureFileDirectory(filePath string) error {
+	dirPath := path.Dir(filePath)
+	return fs.MkdirAll(dirPath, os.ModeDir|os.ModePerm)
 }
 
 func init() {

@@ -161,3 +161,7 @@ bin/*
 locker
 deps
 assets/web/
+vendor
+vendor/*
+.tmp/
+.vscode/

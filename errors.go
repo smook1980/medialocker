@@ -2,6 +2,7 @@ package medialocker
 
 import (
 	"fmt"
+
 	"github.com/pkg/errors"
 )
 
@@ -77,12 +78,3 @@ func MultiError(errs ...error) error {
 
 	return mErr
 }
-
-// Application Errors
-var (
-// ErrGeneric = errors.New("General locker error")
-)
-
-// func (e Error) Error() string {
-// 	return string(e)
-// }

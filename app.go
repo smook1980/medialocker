@@ -4,6 +4,8 @@ import (
 	"context"
 	"io"
 	"sync"
+
+	"github.com/codegangsta/inject"
 )
 
 // Set at build time, unless in DevMode
@@ -12,8 +14,39 @@ var (
 	Commit  = ""
 )
 
+type appContextValueKey string
+
+// AppContextConfig setup the default service providers
+func AppContextConfig(ctx AppContext, i inject.Injector) inject.Injector {
+	i.Map(ctx.Logger())
+	i.Map(ctx.FileSystem())
+	return i
+}
+
+const (
+	FS_CTX_KEY  appContextValueKey = "fs"
+	LOG_CTX_KEY appContextValueKey = "log"
+)
+
 type Appliction interface {
 	Shutdown()
+}
+
+type AppContext struct {
+	context.Context
+}
+
+func (ac AppContext) FileSystem() *FileSystem {
+	switch fs := ac.Value(FS_CTX_KEY).(type) {
+	case *FileSystem:
+		return fs
+	}
+
+	return nil
+}
+
+func (ac AppContext) Logger() *Logger {
+	return ac.Value(LOG_CTX_KEY).(*Logger)
 }
 
 type App struct {

@@ -12,6 +12,9 @@ type Config struct {
 	LogSQL       bool
 	ConfigPath   string
 	LogPath      string
+	ForceColor   bool
+	DisableColor bool
+	ConsoleLog   bool
 	Bind         string
 	DebugLogging bool
 }
