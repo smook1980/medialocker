@@ -35,7 +35,7 @@ func TestBroadcaster_CloserFunc(t *testing.T) {
 	_, closer := subject.Listen(0)
 
 	if err := closer(); err != nil {
-		t.Errorf("Call to closer func returned err: ", err)
+		t.Errorf("Call to closer func returned err: %s", err)
 	}
 
 	if len(subject.listeners) != 0 {
@@ -47,7 +47,7 @@ func TestBroadcaster_CloserFunc(t *testing.T) {
 	subject.Send("Closer Called With Message Queued")
 
 	if err := closer(); err != nil {
-		t.Errorf("Call to closer func returned err: ", err)
+		t.Errorf("Call to closer func returned err: %s", err)
 	}
 
 	if len(subject.listeners) != 0 {
@@ -60,19 +60,19 @@ func TestBroadcaster_CloserFunc(t *testing.T) {
 	subject.Send("Closer does not remove active channels.")
 
 	if err := closer1(); err != nil {
-		t.Errorf("Call to closer func returned err: ", err)
+		t.Errorf("Call to closer func returned err: %s", err)
 	}
 
 	if count := len(subject.listeners); count != 1 {
-		t.Errorf("Given two listeners, after closing one expected one to remain, but got: %i", count)
+		t.Errorf("Given two listeners, after closing one expected one to remain, but got: %v", count)
 	}
 
 	if err := closer2(); err != nil {
-		t.Errorf("Call to closer func returned err: ", err)
+		t.Errorf("Call to closer func returned err: %s", err)
 	}
 
 	if count := len(subject.listeners); count != 0 {
-		t.Errorf("Given two listeners, after closing two expected none to remain, but got: %i", count)
+		t.Errorf("Given two listeners, after closing two expected none to remain, but got: %v", count)
 	}
 }
 
@@ -102,10 +102,10 @@ func TestBroadcaster_Send(t *testing.T) {
 			case msg := <-l:
 				expectedMsg := fmt.Sprintln("Message ", x)
 				if msg != expectedMsg {
-					t.Errorf("Listner %i: Expected recieved message %s to equal %s", lx, msg, expectedMsg)
+					t.Errorf("Listner %v: Expected recieved message %s to equal %s", lx, msg, expectedMsg)
 				}
 			case <-time.After(time.Second * time.Duration(1)):
-				t.Errorf("Listner %i: Timed out waiting for message number %i.", x)
+				t.Errorf("Listner %v: Timed out waiting for message number %v.", lx, x)
 			}
 		}
 	}

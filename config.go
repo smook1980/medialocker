@@ -1,13 +1,16 @@
 package medialocker
 
 import (
-	"gopkg.in/ini.v1"
 	"os"
 	"path"
+	"runtime"
+
+	"gopkg.in/ini.v1"
 )
 
 type Config struct {
 	DbPath       string
+	WorkerCnt    int
 	MemDB        bool
 	LogSQL       bool
 	ConfigPath   string
@@ -74,6 +77,10 @@ func FileConfiguration(configPath string) Configuration {
 // DefaultConfiguration will set any unset options a default value
 func DefaultConfiguration() Configuration {
 	return func(c *Config) error {
+		c.WorkerCnt = runtime.NumCPU()
+		c.DebugLogging = true
+		c.ForceColor = true
+
 		if c.Bind == EmptyConfig.Bind {
 			c.Bind = ":3000"
 		}

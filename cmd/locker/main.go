@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"github.com/smook1980/medialocker/cli"
+	"github.com/smook1980/medialocker/scanner"
 	"github.com/smook1980/medialocker/server"
 )
 
@@ -15,6 +16,7 @@ func main() {
 
 	locker := cli.New()
 	locker.RegisterCommand(server.ServerCommand)
+	locker.RegisterCommand(scanner.Command)
 
 	if err := locker.Exec(os.Args); err != nil {
 		os.Exit(-2)

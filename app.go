@@ -10,7 +10,7 @@ import (
 
 // Set at build time, unless in DevMode
 var (
-	Version = ".dev"
+	Version = "devbuild"
 	Commit  = ""
 )
 
@@ -75,23 +75,23 @@ func (a *App) Shutdown() {
 	}()
 
 	a.cancleFn()
+	a.Wait()
+	a.Log.WithField("prefix", "app").WithField("event", "shutdown").WithField("exit_code", a.ExitCode()).Infoln("Shutting down.")
 }
 
 func (a *App) Wait() int {
-	select {
-	case <-a.context.Done():
-	}
-
 	(&a.wg).Wait()
 
-	return a.ExitCode()
+	return 0
 }
 
 func (a *App) moduleStopped(name string, err error) {
 	a.wg.Done()
 
 	if err != nil {
-		a.Log.Errorf("Module %s stopped unexpectedly with an error: %s", name, err)
+		a.Log.WithField("prefix", name).WithField("event", "failed").Errorf("Stopped do to unexpected error %s", err)
+	} else {
+		a.Log.WithField("prefix", name).WithField("event", "finished").Infof("Module finished successfully.")
 	}
 }
 
@@ -110,15 +110,19 @@ type Command func(*App, chan<- ShutdownSignal) error
 type Module func(*App) error
 
 func (a *App) Start(name string, fn Module) {
-	a.wg.Add(1)
+	a.Log.WithField("Version", Version).WithField("Head", Commit).Infoln("Media Locker is booting!")
 
-	a.Log.Debugf("Starting %s module...", name)
-	go func() {
+	a.wg.Add(1)
+	log := a.Log.WithField("prefix", name)
+
+	log.Infoln("Starting module.")
+	go func(a *App, log Log) {
 		var err error
-		defer a.moduleStopped(name, err)
 
 		err = fn(a)
-	}()
+
+		a.moduleStopped(name, err)
+	}(a, log)
 }
 
 func (a *App) ExitCode() int {

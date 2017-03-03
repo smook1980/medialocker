@@ -1,8 +1,5 @@
 package: github.com/smook1980/medialocker
 import:
-- package: github.com/GeertJohan/go.rice
-  subpackages:
-  - embedded
 - package: github.com/Sirupsen/logrus
   version: ^0.11.0
 - package: github.com/casimir/xdg-go
@@ -25,3 +22,6 @@ import:
   version: ^1.19.1
 - package: github.com/x-cray/logrus-prefixed-formatter
 - package: github.com/mgutz/ansi
+- package: github.com/minio/blake2b-simd
+- package: github.com/go-swagger/go-swagger
+  version: ^0.8.0

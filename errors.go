@@ -55,26 +55,27 @@ func (me Error) Error() string {
 }
 
 func MultiError(errs ...error) error {
-	err := errs[0]
-	errs = errs[1:]
-	var mErr Error
+	var merr *Error
 
-	switch err := err.(type) {
-	case *Error:
-		err.addErrors(errs...)
-		mErr = *err
-	case Error:
-		mErr = err
-		mErr.addErrors(errs...)
-	case error:
-		mErr.addErrors(err)
-		mErr.addErrors(errs...)
-		//	case string:
-		//		mErr.addErrors(errors.New(err))
-		//		mErr.addErrors(errs...)
-	case nil:
-		mErr.addErrors(errs...)
+	for _, err := range errs {
+		if err == nil {
+			continue
+		}
+
+		if merr == nil {
+			switch err := err.(type) {
+			case *Error:
+				merr = err
+			case Error:
+				merr = &err
+			case error:
+				merr = &Error{}
+				merr.addErrors(err)
+			}
+		} else {
+			merr.addErrors(err)
+		}
 	}
 
-	return mErr
+	return merr
 }

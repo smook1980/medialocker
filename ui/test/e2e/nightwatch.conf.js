@@ -9,7 +9,7 @@ module.exports = {
 
   selenium: {
     start_process: true,
-    server_path: 'node_modules/selenium-server/lib/runner/selenium-server-standalone-2.53.1.jar',
+    server_path: require('selenium-server').path,
     host: '127.0.0.1',
     port: 4444,
     cli_args: {
@@ -29,11 +29,7 @@ module.exports = {
 
     chrome: {
       desiredCapabilities: {
-        "browserName": "chrome",
-        "platform": "MAC",
-        "chromeOptions": {
-          "binary": "/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary"
-        },
+        browserName: 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true
       }

@@ -1,14 +1,33 @@
 package medialocker
 
 import (
-	"github.com/Sirupsen/logrus"
-	"os"
-	"path"
-	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 	"fmt"
-	"io"
+	"os"
 	"runtime"
+
+	"github.com/Sirupsen/logrus"
+	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
+
+// Log represents an logging sink
+type Log interface {
+	Debugf(format string, args ...interface{})
+	Infof(format string, args ...interface{})
+	Printf(format string, args ...interface{})
+	Warnf(format string, args ...interface{})
+	Warningf(format string, args ...interface{})
+	Errorf(format string, args ...interface{})
+	Fatalf(format string, args ...interface{})
+	Panicf(format string, args ...interface{})
+	Debugln(args ...interface{})
+	Infoln(args ...interface{})
+	Println(args ...interface{})
+	Warnln(args ...interface{})
+	Warningln(args ...interface{})
+	Errorln(args ...interface{})
+	Fatalln(args ...interface{})
+	Panicln(args ...interface{})
+}
 
 // Logger represents an abstracted structured logging implementation. It
 // provides methods to trigger log messages at various alert levels and a
@@ -21,24 +40,24 @@ type Level struct {
 	logrus.Level
 }
 
-func (l *Level) UnmarshalText(text []byte) (err error){
+func (l *Level) UnmarshalText(text []byte) (err error) {
 	l.Level, err = logrus.ParseLevel(string(text))
 	return
 }
 
 type loggerSettings struct {
 	ConsoleLogging, ForceColor, DisableColor bool
-	LogLevel logrus.Level
-	LogPath string
+	LogLevel                                 logrus.Level
+	LogPath                                  string
 }
 
 // Must takes a message and returns a Do func with takes the func who's error must be nil.
 // If error is not nil, panic, showing the given message and error info before crashing!
 // Must("Oh noos... Stupid %s", failWhale).Do(ImportFunc())
-func (l *Logger) Must(msg string, args ...interface{}) struct { Do func(args ...interface{}) } {
-	return struct { Do func(args ...interface{}) }{
+func (l *Logger) Must(msg string, args ...interface{}) struct{ Do func(args ...interface{}) } {
+	return struct{ Do func(args ...interface{}) }{
 		Do: func(args ...interface{}) {
-			switch err := args[len(args) - 1].(type) {
+			switch err := args[len(args)-1].(type) {
 			case nil:
 				break
 			case error:
@@ -53,7 +72,7 @@ func NewDefaultLogger() *Logger {
 	logger := &Logger{Logger: logrus.New()}
 	logger.Level = logrus.WarnLevel
 	logger.Out = os.Stderr
-	logger.Formatter = &prefixed.TextFormatter{ShortTimestamp: true}
+	logger.Formatter = &prefixed.TextFormatter{ShortTimestamp: true, ForceColors: true}
 	return logger
 }
 
@@ -72,23 +91,31 @@ func (l *Logger) Configure(ctx AppContext, settings loggerSettings) {
 	fs := ctx.FileSystem()
 
 	fs.EnsureFileDirectory(settings.LogPath)
-	logFile, err := fs.OpenFile(settings.LogPath, os.O_APPEND, os.ModePerm)
+
+	logFile, err := fs.OpenFile(settings.LogPath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0755)
 
 	if err != nil {
 		l.Errorf("Failed to open log file %s: %s", settings.LogPath, err)
 		return
 	}
 
-	logFileCloser := func(c io.Closer) error {
-		return c.Close()
-	}(logFile)
-	runtime.SetFinalizer(l, logFileCloser)
+	// go func(fn io.Closer, c AppContext) {
+	//	<-c.Done()
+	//	fn.Close()
+	// }(logFile, ctx)
 
-	l.Out = io.MultiWriter(os.Stderr, logFile)
+	// runtime.SetFinalizer(*l, logFile.Close)
+
+	l.Out = logFile
+	// l.Out = io.MultiWriter(os.Stderr, logFile)
 }
 
-func NewLoggerWith(config Config) *Logger {
+func NewLoggerWith(config Config, fs *FileSystem) *Logger {
 	logger := logrus.New()
+	logFormatter := new(prefixed.TextFormatter)
+	logFormatter.ForceColors = true
+	logger.Formatter = logFormatter
+	l := &Logger{Logger: logger}
 	if config.DebugLogging {
 		logger.Level = logrus.DebugLevel
 	}
@@ -96,36 +123,26 @@ func NewLoggerWith(config Config) *Logger {
 	if config.ConsoleLog {
 		logger.Out = os.Stderr
 
-		logger.Formatter = &prefixed.TextFormatter{
-			ForceColors:    config.ForceColor,
-			// DisableColors:  config.DisableColors,
-			ShortTimestamp: true,
-		}
+		// logger.Formatter = &prefixed.TextFormatter{
+		//	ForceColors: config.ForceColor,
+		//	// DisableColors:  config.DisableColors,
+		//	ShortTimestamp: true,
+		// }
 
-		return &Logger{Logger: logger}
+		return l
 	}
 
-	if LocalFileExists(config.LogPath) {
-		logFile, err := LocalFileSystem().OpenFile(config.LogPath, os.O_APPEND, os.ModePerm)
-		if err != nil {
-			logger.Errorf("Couldn't open log file %s: %v!", config.LogPath, err)
-		} else {
-			logger.Out = logFile
-		}
-	} else {
-		logDir := path.Dir(config.LogPath)
-		err := LocalFileSystem().MkdirAll(logDir, os.ModeDir|os.ModePerm)
-		if err != nil {
-			logger.Errorf("Couldn't create log file directory %s: %v!", logDir, err)
-		}
-		logFile, err := LocalFileSystem().Create(config.LogPath)
+	fs.EnsureFileDirectory(config.LogPath)
 
-		if err != nil {
-			logger.Errorf("Couldn't open log file %s: %v!", config.LogPath, err)
-		} else {
-			logger.Out = logFile
-		}
+	logFile, err := fs.OpenFile(config.LogPath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0755)
+
+	if err != nil {
+		logger.Errorf("Failed to open log file %s: %s", config.LogPath, err)
+		return l
 	}
 
-	return &Logger{Logger: logger}
+	logger.Out = logFile
+	runtime.SetFinalizer(l, func(interface{}) { logFile.Close() })
+
+	return l
 }

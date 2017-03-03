@@ -1,6 +1,8 @@
-hash: f4ad8876e0c65c95f3ca1eb2316f0f410e51c8108fe1ceabc22cfee9f941ff36
-updated: 2017-01-16T11:25:00.740878907-06:00
+hash: d8b0225ead97053a8c98bb615bc58b4895059a074c8f90e678a052f10d71f69d
+updated: 2017-03-02T00:00:41.507533274-06:00
 imports:
+- name: github.com/BurntSushi/toml
+  version: 99064174e013895bbd9b025c31100bd1d9b590ca
 - name: github.com/casimir/xdg-go
   version: 372ccc2180dab73316615641d5617c5ed3e35529
 - name: github.com/codegangsta/inject
@@ -11,6 +13,8 @@ imports:
   version: 9fdfd46f9806a9228aae341d65ab75c5235c383c
   subpackages:
   - embedded
+- name: github.com/go-swagger/go-swagger
+  version: d1a0b6c1007402b2ccde73702eb0e8e43a5e7498
 - name: github.com/jinzhu/gorm
   version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
   subpackages:
@@ -22,7 +26,7 @@ imports:
 - name: github.com/labstack/echo
   version: 8d504c1b699c757b267255c53b3e5219f9974abc
 - name: github.com/labstack/gommon
-  version: 447fe7433567c785af957e549aadae2bf2000071
+  version: 2d272df536d051e737aea353b86c979d6e88bce0
   subpackages:
   - color
   - log
@@ -32,10 +36,14 @@ imports:
   version: 30a891c33c7cde7b02a981314b4228ec99380cca
 - name: github.com/mattn/go-sqlite3
   version: ca5e3819723d8eeaf170ad510e7da1d6d2e94a08
+- name: github.com/mgutz/ansi
+  version: 9520e82c474b0a04dd04f8a40959027271bab992
+- name: github.com/minio/blake2b-simd
+  version: 3f5f724cb5b182a5c278d6d3d55b40e7f8c2efb4
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/Sirupsen/logrus
-  version: d26492970760ca5d33129d2d799e34be5c4782eb
+  version: 0208149b40d863d2c1a2f8fe5753096a9cf2cc8b
 - name: github.com/spf13/afero
   version: 90dd71edc4d0a8b3511dc12ea15d617d03be09e0
   subpackages:
@@ -46,6 +54,8 @@ imports:
   version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
 - name: github.com/valyala/fasttemplate
   version: 3b874956e03f1636d171bda64b130f9135f42cff
+- name: github.com/x-cray/logrus-prefixed-formatter
+  version: 9cd0cf058806896bf8ca66f9a957d36bd9e4ce0f
 - name: golang.org/x/crypto
   version: b07d8c96772f426812d3fc5530710ec1f3b205e7
   subpackages:

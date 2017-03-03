@@ -1,55 +1,52 @@
-VERSION ?= $(shell git describe --always --tags)
-COMMIT ?= $(shell git rev-parse --short=8 HEAD)
+VERSION = $(shell git describe --always --tags)
+COMMIT = $(shell git rev-parse --short=8 HEAD)
 
 SOURCES := $(shell find . -name '*.go')
+PKGS := $(shell glide novendor)
 
 LDFLAGS=-ldflags "-s -X medialocker.Version=${VERSION} -X medialocker.Commit=${COMMIT}"
-DEV_LDFLAGS=-ldflags "-s -X medialocker.Version=snapshot -X medialocker.Commit=${COMMIT}"
+DEV_LDFLAGS=-ldflags "-s -X medialocker.Version=snapshot -X medialocker=Commit ${COMMIT}"
 BINARY=./bin/locker
+BINARY-DEV=./bin/locker-dev
 
 GLIDE := $(shell realpath ${GOPATH}/bin/glide)
-RICE := $(shell realpath ${GOPATH}/bin/rice)
+GO-BINDATA := $(shell realpath ${GOPATH}/bin/go-bindata)
 
-default: dep build
+release: dep assets test ${BINARY}
 
-build: assets ${BINARY}
+install: dep assets test
 
-dev-server:
+build: assets test ${BINARY}
+
+build-dev: assets test ${BINARY-DEV}
+
+run: bindata
+	go run -tags release ${LDFLAGS} ./cmd/locker/main.go
+
+run-dev: bindata
 	go run -tags dev ${DEV_LDFLAGS} ./cmd/locker/main.go
 
-dev-bin:
-	go build -tags dev -o ./bin/locker-dev ${DEV_LDFLAGS} ./cmd/locker/main.go
+$(BINARY-DEV): $(SOURCES)
+	go build -tags dev -o $(BINARY-DEV) ${DEV_LDFLAGS} ./cmd/locker/main.go
 
 ${BINARY}: $(SOURCES)
-	go build -o ${BINARY} ${LDFLAGS} ./cmd/locker/main.go
-
-# docker-${BINARY}: $(SOURCES)
-#		CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -o ${BINARY} ${LDFLAGS} \
-#			./cmd/chronograf/main.go
-
-# docker: dep assets docker-${BINARY}
-#		docker build -t chronograf .
+	go build -tags release -o ${BINARY} ${LDFLAGS} ./cmd/locker/main.go
 
 assets: js bindata
-
-# dev-assets: dev-js bindata
-
-bindata: ${RICE}
-	go generate -x ./assets
 
 js:
 	cd ui && npm run build
 
-# dev-js:
-# 	cd ui && yarn build
-
-dep: jsdep godep
+bindata: ${GO-BINDATA}
+	go generate -x .
 
 ${GLIDE}:
 	curl https://glide.sh/get | sh
 
-${RICE}:
-	go get -u -v github.com/GeertJohan/go.rice/rice
+${GO-BINDATA}:
+	go get -u github.com/jteeuwen/go-bindata/...
+
+dep: jsdep godep
 
 godep: ${GLIDE}
 	glide install
@@ -57,25 +54,16 @@ godep: ${GLIDE}
 jsdep:
 	cd ui && yarn install
 
-# gen: bolt/internal/internal.proto
-#		go generate -x ./bolt/internal
-
-test: jstest gotest gotestrace
+test: jstest gotest
 
 gotest:
-	go test ./...
-
-gotestrace:
-	go test -race ./...
+	go test -timeout 10s -race ${PKGS}
 
 jstest:
-	# cd ui && npm test
+	cd ui && yarn run test
 
-run: ${BINARY}
-	./bin/locker
 clean:
 	if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
-	find . -type f -name rice-box.go -print0 | xargs -0 rm
-	cd assets && rm -rf web
+	rm -rf ui/dist || true
 
-.PHONY: clean test jstest gotest run
+.PHONY: clean jstest gotesttrace gotest test jsdep godep dep js bindata assets run-dev run

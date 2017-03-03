@@ -1,12 +1,6 @@
 # medialocker-ui
 
-> MediaLocker frontend
-
-## Reference
-  * [element-ui](http://element.eleme.io)
-  * [Vue Material](https://vuematerial.github.io/#/getting-started)
-  * [Vue Webpack Template](http://vuejs-templates.github.io/webpack/)
-  * [Vue Loader](http://vue-loader.vuejs.org/en/)
+> A Vue.js project
 
 ## Build Setup
 
@@ -19,6 +13,9 @@ npm run dev
 
 # build for production with minification
 npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
 
 # run unit tests
 npm run unit

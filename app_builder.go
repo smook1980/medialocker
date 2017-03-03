@@ -36,7 +36,7 @@ func (ab *AppBuilder) Build() (*App, []error) {
 		ab.app.Config, _ = BuildConfig()
 	}
 
-	ab.app.Log = NewLoggerWith(ab.app.Config)
+	ab.app.Log = NewLoggerWith(ab.app.Config, &ab.app.Fs)
 	ab.app.Registry = *NewRegistry(ab.app.Log, ab.app.Config)
 
 	return ab.app, ab.errors

@@ -1,8 +1,6 @@
 package server
 
 import (
-	"log"
-
 	"github.com/smook1980/medialocker"
 	"github.com/smook1980/medialocker/cli"
 	cli2 "github.com/urfave/cli"
@@ -14,8 +12,6 @@ var ServerCommand = cli.Command{
 	Usage:       "Start the MediaLocker server.",
 	Description: "Start the MediaLocker storage and web server.",
 	Action: func(c *cli2.Context) error {
-		log.Printf("Media Locker v%s #%s", medialocker.Version, medialocker.Commit)
-
 		app, errs := medialocker.NewAppBuilder().WithConfiguration(medialocker.FileConfiguration("")).Build()
 
 		if len(errs) != 0 {
@@ -27,11 +23,11 @@ var ServerCommand = cli.Command{
 		app.Shutdown()
 
 		// if app, err := medialocker.AppInit(); err == nil {
-		// 	Listen(app, ":3000")
-		// 	// app.Halt()
-		// 	// app.Wait()
+		//	Listen(app, ":3000")
+		//	// app.Halt()
+		//	// app.Wait()
 		// } else {
-		// 	return err
+		//	return err
 		// }
 
 		return nil
