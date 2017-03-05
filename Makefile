@@ -57,7 +57,7 @@ jsdep:
 test: jstest gotest
 
 gotest:
-	go test -timeout 10s -race ${PKGS}
+	go test -i -timeout 10s -race ${PKGS}
 
 jstest:
 	cd ui && yarn run test
