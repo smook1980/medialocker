@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="uk-container">
     <div class="ml-nav-button">
       <a href="" class="uk-icon-button" uk-icon="icon: menu" uk-toggle="target: #offcanvas-overlay" ></a>
     </div>
@@ -30,22 +30,8 @@
  };
 </script>
 
-<style>
-@import 'https://fonts.googleapis.com/css?family=Roboto+Mono';
-
-html {
-    font-family: ProximaNova, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
-    font-weight: normal;
-    line-height: 1.5;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    background: #fff;
-    color: #666;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility
-}
+<style lang="less">
+@import "./main.less";
 
 #app {
   color: #2c3e50;
