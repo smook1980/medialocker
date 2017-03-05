@@ -165,3 +165,4 @@ vendor
 vendor/*
 .tmp/
 .vscode/
+ui/vendor/uikit/dist/

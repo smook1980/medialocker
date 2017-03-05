@@ -66,4 +66,8 @@ clean:
 	if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
 	rm -rf ui/dist || true
 
-.PHONY: clean jstest gotesttrace gotest test jsdep godep dep js bindata assets run-dev run
+uikit_update:
+	@echo "Using git subtree to pull latest changes to ui/vendor/uikit"
+	git subtree pull --prefix ./ui/vendor/uikit uikit/uikit master --squash
+
+.PHONY: uikit_update clean jstest gotesttrace gotest test jsdep godep dep js bindata assets run-dev run
