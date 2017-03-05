@@ -1,11 +1,16 @@
-var path = require('path')
-var utils = require('./utils')
-var config = require('../config')
-var vueLoaderConfig = require('./vue-loader.conf')
+const path = require('path');
+const utils = require('./utils');
+const config = require('../config');
+const vueLoaderConfig = require('./vue-loader.conf');
+const uikitUtil = require('../vendor/uikit/build/util');
 
 function resolve (dir) {
-  return path.join(__dirname, '..', dir)
+  return path.join(__dirname, '..', dir);
 }
+
+const IconJSONPath = resolve('./dist/uikit_icons.json');
+const IconBasePath = resolve('./vendor/uikit/src/images/icons');
+const IconsGlob = `${IconBasePath}/*.svg`;
 
 module.exports = {
   entry: {
@@ -23,6 +28,8 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'uikit': resolve('vendor/uikit'),
+      'icons$': IconJSONPath
     }
   },
   module: {
@@ -63,5 +70,15 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    {
+      apply(compiler) {
+        let util = uikitUtil;
+
+        compiler.plugin('after-plugins', () => util.write(IconJSONPath, util.icons(IconsGlob)));
+        // compiler.plugin('done', () => fs.unlink(IconJSONPath, () => {}));
+      }
+    }
+  ]
 }

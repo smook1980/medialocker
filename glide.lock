@@ -1,5 +1,5 @@
-hash: d8b0225ead97053a8c98bb615bc58b4895059a074c8f90e678a052f10d71f69d
-updated: 2017-03-02T00:00:41.507533274-06:00
+hash: 820aba7eaf819027fbb2b987c6fe0923a9e6922a7e24bc1bf2d6d12499124e3c
+updated: 2017-03-04T15:28:35.472233239-06:00
 imports:
 - name: github.com/BurntSushi/toml
   version: 99064174e013895bbd9b025c31100bd1d9b590ca
@@ -9,6 +9,8 @@ imports:
   version: 37d7f8432a3e684eef9b2edece76bdfa6ac85b39
 - name: github.com/daaku/go.zipexe
   version: a5fe2436ffcb3236e175e5149162b41cd28bd27d
+- name: github.com/elazarl/go-bindata-assetfs
+  version: 30f82fa23fd844bd5bb1e5f216db87fd77b5eb43
 - name: github.com/GeertJohan/go.rice
   version: 9fdfd46f9806a9228aae341d65ab75c5235c383c
   subpackages:
@@ -24,7 +26,7 @@ imports:
 - name: github.com/kardianos/osext
   version: c2c54e542fb797ad986b31721e1baedf214ca413
 - name: github.com/labstack/echo
-  version: 8d504c1b699c757b267255c53b3e5219f9974abc
+  version: 948d607539e92f3974d8f24951c8975d7342e24a
 - name: github.com/labstack/gommon
   version: 2d272df536d051e737aea353b86c979d6e88bce0
   subpackages:

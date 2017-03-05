@@ -25,3 +25,4 @@ import:
 - package: github.com/minio/blake2b-simd
 - package: github.com/go-swagger/go-swagger
   version: ^0.8.0
+- package: github.com/elazarl/go-bindata-assetfs
