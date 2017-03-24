@@ -4,7 +4,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/smook1980/medialocker"
+	"github.com/smook1980/medialocker/util"
+
 	filetype "gopkg.in/h2non/filetype.v1"
 )
 
@@ -28,7 +29,7 @@ func (mp *MediaPath) Update() error {
 	err2 := mp.updateHash(file)
 
 	if err1 != nil || err2 != nil {
-		return medialocker.MultiError(err1, err2)
+		return util.MultiError(err1, err2)
 	}
 
 	return nil

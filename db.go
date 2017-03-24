@@ -2,13 +2,17 @@ package medialocker
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"sync"
+
+	"github.com/smook1980/medialocker/models"
 )
 
 const (
-	DB_URI_TEMPLATE = "file://%s?mode=rwc&cache=shared&mode=memory"
+	DB_URI_TEMPLATE = "%s.db"
+	// DB_URI_TEMPLATE = "file:%s.db?mode=rwc"
 )
 
 type DB interface {
@@ -71,9 +75,12 @@ func NewDBConnectionFactory(log *Logger, c Config) (DBConnectionFactory, Closer)
 		connect.Do(func() {
 			dbLock.Lock()
 			defer dbLock.Unlock()
-			logger.Debug("Connecting...")
+			logger.Debug("Connecting db...")
 			db, err = gorm.Open("sqlite3", dbUrl)
 			db.LogMode(logSQL)
+			logger.Debug("Migrating Schema...")
+			models.SchemaMigrate(db)
+			logger.Debug("DB Opened...")
 		})
 
 		if err != nil {

@@ -94,7 +94,7 @@ func DefaultConfiguration() Configuration {
 		}
 
 		if c.DbPath == EmptyConfig.DbPath {
-			c.DbPath = LocalFileSystem().DataPath("db")
+			c.DbPath = LocalFileSystem().DataPath("data.db")
 		}
 
 		return nil

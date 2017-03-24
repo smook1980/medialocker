@@ -3,7 +3,9 @@ package scanner
 import (
 	"github.com/smook1980/medialocker"
 	"github.com/smook1980/medialocker/cli"
+	. "github.com/smook1980/medialocker/models"
 	"github.com/smook1980/medialocker/types"
+	"github.com/smook1980/medialocker/util"
 	cli2 "github.com/urfave/cli"
 )
 
@@ -15,17 +17,35 @@ var Command = cli.Command{
 		app, errs := medialocker.NewAppBuilder().WithConfiguration(medialocker.FileConfiguration("")).Build()
 
 		if len(errs) != 0 {
-			return medialocker.MultiError(errs...)
+			return util.MultiError(errs...)
 		}
+
+		var db *medialocker.DBConnection
+		var err error
+
+		if db, err = app.Registry.DB(); err != nil {
+			app.Log.Fatalf("Failed to open db! %s", err)
+		}
+
+		defer db.Close()
 
 		scanner := NewScanner("/Users/smook/Downloads", 8, app.Log)
 
 		scanner.Each(func(mp types.MediaPath) {
+			fp, _ := NewFilePath(mp.Realpath, mp.Hash)
+			tx := db.Begin()
+			tx.
+				Where(FilePath{Basename: fp.Basename, Dirname: fp.Dirname}).
+				Attrs(fp).
+				FirstOrCreate(&fp)
+
+			tx.Commit()
+
 			app.Log.
 				WithField("prefix", "media_path").
 				WithField("event", "media_path_found").
 				WithField("command", "scanner").
-				Debugf("%+v", mp)
+				Debugf("%+v", fp)
 		})
 
 		scanner.Each(func(mp types.MediaPath) {

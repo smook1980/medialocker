@@ -1,46 +1,49 @@
 package models
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
-	"io"
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
 	"time"
 
-	"gopkg.in/h2non/filetype.v1"
 	"github.com/jinzhu/gorm"
+	"github.com/smook1980/medialocker/types"
+	"gopkg.in/h2non/filetype.v1"
 )
 
 // FilePath represents a known file
 type FilePath struct {
-	gorm.Model
-	Realpath    string `gorm:"size:4096;not null;unique;unique_index"`
-	Basename    string `gorm:"size:4096"`
-	Dirname     string `gorm:"size:4096;not null;index"`
+	Model
+	Basename    string `gorm:"size:4096;not null"`
+	Dirname     string `gorm:"size:4096;not null"`
 	MimeType    string `gorm:"size:15;not null;index"`
 	MimeSubType string `gorm:"size:100;not null;index"`
-	Sha256      string `gorm:"not null;index"`
+	HashURI     string `gorm:"not null;index"`
 	BytesSize   int64
 	ModTime     time.Time
 }
 
-// NewFilePath FilePath from a given path
-func NewFilePath(pathname string) (fp *FilePath, err error) {
-	realpath, err := filepath.Abs(pathname)
-	if err != nil {
+// NewFilePath creates a new FilePath and sets it's fields for the given path.
+// hashURI is optional, an empty string causes the value to be updated.
+func NewFilePath(pathname, hashURI string) (fp *FilePath, err error) {
+	fp = &FilePath{}
+
+	if err = fp.setPath(pathname); err != nil {
 		return
 	}
-
-	fp = &FilePath{Realpath: realpath}
 
 	if err = fp.Stat(); err != nil {
-		return
+		// Warn
 	}
 
-	if err = fp.SetSha256(); err != nil {
-		return
+	if hashURI == "" {
+		if err = fp.calcHash(); err != nil {
+			// Warn
+		}
+	} else {
+		fp.HashURI = hashURI
+
 	}
 
 	err = fp.SetMimeType()
@@ -48,10 +51,27 @@ func NewFilePath(pathname string) (fp *FilePath, err error) {
 	return
 }
 
+func (fp *FilePath) setPath(pathname string) error {
+	realpath, err := filepath.Abs(pathname)
+	if err != nil {
+		return err
+	}
+
+	fp.Basename = filepath.Base(realpath)
+	fp.Dirname = filepath.Dir(realpath)
+
+	return nil
+}
+
+// Realpath returns the absolute path
+func (fp *FilePath) Realpath() string {
+	return filepath.Join(fp.Dirname, fp.Basename)
+}
+
 // SetMimeType sets MimeType and MimeSubType fields from file
 func (fp *FilePath) SetMimeType() error {
 	// Read a file
-	kind, err := filetype.MatchFile(fp.Realpath)
+	kind, err := filetype.MatchFile(fp.Realpath())
 
 	if err != nil {
 		return nil
@@ -64,37 +84,66 @@ func (fp *FilePath) SetMimeType() error {
 }
 
 func (fp *FilePath) Stat() error {
-	fileinfo, err := os.Stat(fp.Realpath)
+	fileinfo, err := os.Stat(fp.Realpath())
 
 	if err != nil {
 		return err
 	}
 
 	fp.Basename = fileinfo.Name()
-	fp.Dirname = path.Dir(fp.Realpath)
+	fp.Dirname = path.Dir(fp.Realpath())
 	fp.BytesSize = fileinfo.Size()
 	fp.ModTime = fileinfo.ModTime()
 
 	return nil
 }
 
+// Open opens the file for reading.
 func (fp *FilePath) Open() (f *os.File, err error) {
-	f, err = os.Open(fp.Realpath)
+	f, err = os.Open(fp.Realpath())
 
 	return
 }
 
-func (fp *FilePath) SetSha256() error {
-	hasher := sha256.New()
+func (fp *FilePath) calcHash() error {
 	f, err := fp.Open()
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	if _, err := io.Copy(hasher, f); err != nil {
+
+	hash, err := types.HashReader(types.Blake2bHasher, f)
+	if err != nil {
 		return err
 	}
 
-	fp.Sha256 = hex.EncodeToString(hasher.Sum(nil))
+	fp.HashURI = hash.URI()
+
 	return nil
+}
+
+// Hash for file
+func (fp *FilePath) Hash() (*types.Hash, error) {
+	h, err := types.HashFromURI(fp.HashURI)
+	if err != nil {
+		if err := fp.calcHash(); err != nil {
+			return &types.Hash{}, err
+		}
+
+		return types.HashFromURI(fp.HashURI)
+	}
+
+	return h, nil
+}
+
+func init() {
+	registerSchemaMigrator(func(db *gorm.DB) {
+		fmt.Println("FILE PATH SCHEMA SHIT YO")
+		m := &FilePath{}
+
+		db.
+			AutoMigrate(m).
+			Model(m).
+			AddUniqueIndex("idx_basename_dirname", "basename", "dirname")
+	})
 }

@@ -5,7 +5,7 @@ SOURCES := $(shell find . -name '*.go')
 PKGS := $(shell glide novendor)
 
 LDFLAGS=-ldflags "-s -X medialocker.Version=${VERSION} -X medialocker.Commit=${COMMIT}"
-DEV_LDFLAGS=-ldflags "-s -X medialocker.Version=snapshot -X medialocker=Commit ${COMMIT}"
+DEV_LDFLAGS=-ldflags "-s -X medialocker.Version=snapshot -X medialocker.Commit=${COMMIT}"
 BINARY=./bin/locker
 BINARY-DEV=./bin/locker-dev
 

@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/smook1980/medialocker"
 	"github.com/smook1980/medialocker/cli"
+	"github.com/smook1980/medialocker/util"
 	cli2 "github.com/urfave/cli"
 )
 
@@ -15,7 +16,7 @@ var ServerCommand = cli.Command{
 		app, errs := medialocker.NewAppBuilder().WithConfiguration(medialocker.FileConfiguration("")).Build()
 
 		if len(errs) != 0 {
-			return medialocker.MultiError(errs...)
+			return util.MultiError(errs...)
 		}
 
 		app.Start("Web Server", Module)

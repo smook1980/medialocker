@@ -8,6 +8,7 @@ import (
 
 	"github.com/smook1980/medialocker"
 	. "github.com/smook1980/medialocker/types"
+	"github.com/smook1980/medialocker/util"
 )
 
 // EachFunc is a function called for each MediaPath object found by Scanner
@@ -138,7 +139,7 @@ func (s *Scanner) Run() error {
 	s.Log.Infoln("Scanner all done!")
 
 	if len(errs) > 0 {
-		return medialocker.MultiError(errs...)
+		return util.MultiError(errs...)
 	}
 
 	return nil

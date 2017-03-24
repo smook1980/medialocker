@@ -1,4 +1,4 @@
-package medialocker
+package util
 
 import (
 	"fmt"
