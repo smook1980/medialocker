@@ -1,16 +1,19 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
-	"github.com/smook1980/medialocker/app/server/queries"
+	"github.com/smook1980/medialocker/app"
 	"github.com/smook1980/medialocker/app/server/mutations"
+	"github.com/smook1980/medialocker/app/server/queries"
 )
 
 var schema, _ = graphql.NewSchema(graphql.SchemaConfig{
-	Query: queries.RootQuery,
+	Query:    queries.RootQuery,
 	Mutation: mutations.RootMutation,
 })
 
@@ -35,7 +38,7 @@ func graphqlHandler() http.Handler {
 	})
 }
 
-func Start()  {
+func Start(ctx app.Context) {
 	r := gin.Default()
 	r.Any("/graphql", gin.WrapH(graphqlHandler()))
 	r.GET("/ping", func(c *gin.Context) {
@@ -43,5 +46,7 @@ func Start()  {
 			"message": "pong",
 		})
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+
+	listen := fmt.Sprintf("%s:%d", ctx.HTTPServerHost(), ctx.HTTPServerPort())
+	r.Run(listen)
 }
